@@ -1,0 +1,212 @@
+#include <iostream>
+#include<iomanip>
+#include<cmath>
+#include<string>
+#include<ctime>
+#include<fstream>
+using namespace std;
+
+const double MAX_ALLOWED = 20;
+const int MAX_RAND = 1, MIN_RAND = 10;
+
+void menu();
+
+int main()
+{
+	
+
+	menu();
+
+	system("pause");
+	return 0;
+}
+
+void menu()
+{
+	double balance = 0;
+	double amount = 0;
+	int correctGuesses = 0;
+	int missedGuesses = 0;
+
+	string playerName, inputYN, userInput;
+
+	bool quit = false, YN = false, validInput = false;
+
+	char choice;
+
+	ofstream userData;
+
+	cout << setprecision(2) << fixed << showpoint;
+	cout << "\n***The Winners ***\n" << endl;
+	cout << "***MAIN MENU***\n" << endl;
+
+	do
+	{
+		cout << "\nPlease select one of the following:\n" << endl;
+		cout << "\t1: Display my available credit" << endl;
+		cout << "\t2: Add credits to my account" << endl;
+		cout << "\t3: Play The Guessing Game" << endl;
+		cout << "\t4: Display My Statistics" << endl;
+		cout << "\t5: Save My Statistics" << endl;
+		cout << "\t6: To exit" << endl;
+		cin >> choice;
+		cout << endl;
+		switch (choice)
+		{
+
+		case '1': cout << "You entered 1: Display my available credit\n";
+		{
+			cout << "Your available balance is: $ " << balance << "\n\n";
+		}
+			break;
+
+
+		case '2': cout << "You entered 2: Add credits to my account\n";
+		{
+			do
+			{
+				cout << "Input amount of credits up to $20: ";
+				cin >> amount;
+
+				if (!cin.fail())
+				{
+					if (amount >= 0 && amount <= 20)
+					{
+						validInput = true;
+					}
+					else
+					{
+						cout << "Value must be 0 or less than or equal to 20.\n";
+					}
+				}
+				else
+				{
+					cout << "Value must be a number.\n";
+					cin.clear();
+					cin.ignore(INT_MAX, '\n');
+				}
+			} while (!validInput);
+			{
+				balance += amount;
+			}
+		}
+			break;
+
+		case '3': cout << "You entered 3: Play The Guessing Game\n";
+		{
+			bool numberCheck1to10 = false;
+			bool YN = false;
+
+
+
+
+
+			do
+			{
+				cout << "This game costs $5 dollars to play. Do you wish to proceed? (Y/N): ";
+				cin >> userInput;
+
+				//Convert to lower
+				for (int i = 0; i < userInput.length(); i++) userInput[i] = tolower(userInput[i]);
+				{
+					//if (userInput == "Yes") userInput == "y";
+					//if (userInput == "No") userInput == "n";
+					//if (userInput == "yes") userInput == "y";
+					//if (userInput == "no") userInput == "n";
+					if (userInput == "y") YN = true;
+					if (userInput == "n") YN = false;
+				}
+			} while (userInput != "y" && userInput != "n");
+			{}
+
+
+
+
+			if (YN == true)
+			{
+				if (balance >= 5)
+				{
+					balance -= 5;
+					cout << "\nYou lost $5.\n";
+
+					int randomNum, userGuess;
+					unsigned seed = time(0);
+					srand(seed);
+
+					do
+					{
+						randomNum = rand() % 10 + 1;
+						cout << randomNum;
+						cout << "\nGuess a number between 1 and 10. ";
+						cin >> userGuess;
+
+						if (!cin.fail())
+						{
+							if (userGuess >= 1 && userGuess <= 10)
+							{
+								numberCheck1to10 = true;
+							}
+							else
+							{
+								cout << "\nValue must be 1 or less than or equal to 10.\n";
+							}
+						}
+						else
+						{
+							cout << "Value must be a number.\n";
+							cin.clear();
+							cin.ignore(INT_MAX, '\n');
+						}
+					} while (!numberCheck1to10);
+					{}
+
+
+					if (userGuess == randomNum)
+					{
+						cout << "\nYou are correct! You win $20 dollars!\n";
+						balance += 20;
+						correctGuesses++;
+					}
+					else
+					{
+						cout << "\nYou are incorrect :(\n";
+						missedGuesses++;
+					}
+				}
+				else
+				{
+					cout << "\nNot enough funds required to play game! Add Funds!\n\n";
+				}
+
+			}
+
+
+		}
+			break;
+		case '4': cout << "You entered 4: Display My Statistics\n";
+		{
+
+		}
+			break;
+		case '5':cout << "You entered 5: Save My Statistics\n";
+		{
+
+		}
+			break;
+		case '6': cout << "Thank you for using The Winners software. Good bye!\n";
+		{
+			quit = true;
+		}
+			break;
+
+		default: cout << "You did not enter 1,2,3,4,5, or 6\n\n";
+		}
+
+
+		
+		
+	}
+	while (!quit);
+	{}
+	
+}
