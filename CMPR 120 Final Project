@@ -4,6 +4,7 @@
 #include<string>
 #include<ctime>
 #include<fstream>
+
 using namespace std;
 
 const double MAX_ALLOWED = 20;
@@ -13,7 +14,6 @@ void menu();
 
 int main()
 {
-	
 
 	menu();
 
@@ -33,8 +33,6 @@ void menu()
 	bool quit = false, YN = false, validInput = false;
 
 	char choice;
-
-	ofstream userData;
 
 	cout << setprecision(2) << fixed << showpoint;
 	cout << "\n***The Winners ***\n" << endl;
@@ -58,7 +56,7 @@ void menu()
 		{
 			cout << "Your available balance is: $ " << balance << "\n\n";
 		}
-			break;
+		break;
 
 
 		case '2': cout << "You entered 2: Add credits to my account\n";
@@ -90,16 +88,11 @@ void menu()
 				balance += amount;
 			}
 		}
-			break;
+		break;
 
 		case '3': cout << "You entered 3: Play The Guessing Game\n";
 		{
 			bool numberCheck1to10 = false;
-			bool YN = false;
-
-
-
-
 
 			do
 			{
@@ -107,16 +100,14 @@ void menu()
 				cin >> userInput;
 
 				//Convert to lower
-				for (int i = 0; i < userInput.length(); i++) userInput[i] = tolower(userInput[i]);
+				for (unsigned i = 0; i < userInput.length(); i++) userInput[i] = tolower(userInput[i]);
 				{
-					//if (userInput == "Yes") userInput == "y";
-					//if (userInput == "No") userInput == "n";
-					//if (userInput == "yes") userInput == "y";
-					//if (userInput == "no") userInput == "n";
+
 					if (userInput == "y") YN = true;
 					if (userInput == "n") YN = false;
 				}
-			} while (userInput != "y" && userInput != "n");
+			} 
+			while (userInput != "y" && userInput != "n");
 			{}
 
 
@@ -127,16 +118,15 @@ void menu()
 				if (balance >= 5)
 				{
 					balance -= 5;
-					cout << "\nYou lost $5.\n";
+					cout << "\nYou payed $5.\n";
 
 					int randomNum, userGuess;
-					unsigned seed = time(0);
-					srand(seed);
+					//srand(time(NULL));
 
 					do
 					{
 						randomNum = rand() % 10 + 1;
-						cout << randomNum;
+						//cout << randomNum << endl;
 						cout << "\nGuess a number between 1 and 10. ";
 						cin >> userGuess;
 
@@ -169,7 +159,7 @@ void menu()
 					}
 					else
 					{
-						cout << "\nYou are incorrect :(\n";
+						cout << "\nYou are incorrect. You lose :( \n";
 						missedGuesses++;
 					}
 				}
@@ -182,31 +172,122 @@ void menu()
 
 
 		}
-			break;
+		break;
 		case '4': cout << "You entered 4: Display My Statistics\n";
 		{
+			ifstream userData;
 
+			
+				do
+				{
+					cout << "\nDo you wish to view your stats? (Y/N): ";
+					cin >> userInput;
+
+					//Convert to lower
+					for (unsigned i = 0; i < userInput.length(); i++) userInput[i] = tolower(userInput[i]);
+					{
+
+						if (userInput == "y") YN = true;
+						if (userInput == "n") YN = false;
+					}
+				} while (userInput != "y" && userInput != "n");
+				{}
+
+				if (YN == true)
+				{
+					cout << "Enter a previously saved file name: ";
+					cin >> playerName;
+					userData.open(playerName);
+
+				}
+				if (userData.is_open())
+				{
+					while (getline(userData, playerName))
+					{
+						cout << playerName << endl;
+					}
+					
+					userData.close();
+				}
+				else
+				{
+					cout << "File not found.\n";
+				}
+				
+
+
+
+
+			
+			/*time_t sysTime = time(0);
+			char* time = ctime(&sysTime);
+			cout << "\nData Time: " << time;
+			cout << "Player Name: " << endl;
+			cout << "Available Credit: " << balance << endl;
+			cout << "Games Played: " << correctGuesses + missedGuesses << endl;
+			cout << "Correct Guesses: " << correctGuesses << endl;
+			cout << "Missed Guesses: " << missedGuesses << endl;
+			cout << "Money you won: $" << correctGuesses * 20 << endl;
+			cout << "Money you lost: $" << missedGuesses * 5 << endl;*/
 		}
-			break;
+		break;
 		case '5':cout << "You entered 5: Save My Statistics\n";
 		{
+			ofstream userData(playerName);
+			do
+			{
+				cout << "Do you wish to save your stats? (Y/N): ";
+				cin >> userInput;
 
+				//Convert to lower
+				for (unsigned i = 0; i < userInput.length(); i++) userInput[i] = tolower(userInput[i]);
+				{
+
+					if (userInput == "y") YN = true;
+					if (userInput == "n") YN = false;
+				}
+			} while (userInput != "y" && userInput != "n");
+			{}
+			
+			if (YN == true)
+			{
+					cout << "Please enter username for save file (NO SPACES): ";
+					cin >> playerName;
+					userData.open(playerName, ios::app);
+					
+					time_t sysTime = time(0);
+					char* time = ctime(&sysTime);
+					userData
+						<< "\nData Time: " << time
+						<< "Player Name: " << playerName << endl
+						<< "Available Credit: " << balance << endl
+						<< "Games Played: " << correctGuesses + missedGuesses << endl
+						<< "Correct Guesses: " << correctGuesses << endl
+						<< "Missed Guesses: " << missedGuesses << endl
+						<< "Money you won: $" << correctGuesses * 20 << endl
+						<< "Money you lost: $" << missedGuesses * 5 << endl;
+					
+					cout << "Data saved in file: " << playerName << endl;
+					userData.close();
+
+			}
+			
+			
 		}
-			break;
+		break;
 		case '6': cout << "Thank you for using The Winners software. Good bye!\n";
 		{
 			quit = true;
 		}
-			break;
+		break;
 
 		default: cout << "You did not enter 1,2,3,4,5, or 6\n\n";
 		}
 
 
-		
-		
-	}
-	while (!quit);
+
+
+	} while (!quit);
 	{}
-	
+
 }
