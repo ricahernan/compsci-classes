@@ -291,3 +291,7 @@ void menu()
 	{}
 
 }
+
+/*solution properties, configuration
+properties, C/C++, preprocessor, preprocessor definitions, edit,
+paste _CRT_SECURE_NO_WARNINGS which enabled the use of ctime*/
