@@ -152,7 +152,7 @@ void menu()
 
 					if (userGuess == randomNum)
 					{
-						cout << "\nYou are correct! You win $20 dollars!\n";
+						cout << "\nYou are correct! You win $50 dollars!\n";
 						balance += 20;
 						correctGuesses++;
 					}
@@ -263,7 +263,7 @@ void menu()
 					<< "Games Played: " << correctGuesses + missedGuesses << endl
 					<< "Correct Guesses: " << correctGuesses << endl
 					<< "Missed Guesses: " << missedGuesses << endl
-					<< "Money you won: $" << correctGuesses * 20 << endl
+					<< "Money you won: $" << correctGuesses * 50 << endl
 					<< "Money you lost: $" << missedGuesses * 5 << endl;
 
 				cout << "Data saved in file: " << playerName << endl;
