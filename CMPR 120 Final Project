@@ -106,8 +106,7 @@ void menu()
 					if (userInput == "y") YN = true;
 					if (userInput == "n") YN = false;
 				}
-			} 
-			while (userInput != "y" && userInput != "n");
+			} while (userInput != "y" && userInput != "n");
 			{}
 
 
@@ -121,7 +120,7 @@ void menu()
 					cout << "\nYou payed $5.\n";
 
 					int randomNum, userGuess;
-					//srand(time(NULL));
+					srand((unsigned) (time(NULL)));
 
 					do
 					{
@@ -177,48 +176,48 @@ void menu()
 		{
 			ifstream userData;
 
-			
-				do
+
+			do
+			{
+				cout << "\nDo you wish to view your stats? (Y/N): ";
+				cin >> userInput;
+
+				//Convert to lower
+				for (unsigned i = 0; i < userInput.length(); i++) userInput[i] = tolower(userInput[i]);
 				{
-					cout << "\nDo you wish to view your stats? (Y/N): ";
-					cin >> userInput;
 
-					//Convert to lower
-					for (unsigned i = 0; i < userInput.length(); i++) userInput[i] = tolower(userInput[i]);
-					{
-
-						if (userInput == "y") YN = true;
-						if (userInput == "n") YN = false;
-					}
-				} while (userInput != "y" && userInput != "n");
-				{}
-
-				if (YN == true)
-				{
-					cout << "Enter a previously saved file name: ";
-					cin >> playerName;
-					userData.open(playerName);
-
+					if (userInput == "y") YN = true;
+					if (userInput == "n") YN = false;
 				}
-				if (userData.is_open())
+			} while (userInput != "y" && userInput != "n");
+			{}
+
+			if (YN == true)
+			{
+				cout << "Enter a previously saved file name: ";
+				cin >> playerName;
+				userData.open(playerName);
+
+			}
+			if (userData.is_open())
+			{
+				while (getline(userData, playerName))
 				{
-					while (getline(userData, playerName))
-					{
-						cout << playerName << endl;
-					}
-					
-					userData.close();
+					cout << playerName << endl;
 				}
-				else
-				{
-					cout << "File not found.\n";
-				}
-				
+
+				userData.close();
+			}
+			else
+			{
+				cout << "File not found.\n";
+			}
 
 
 
 
-			
+
+
 			/*time_t sysTime = time(0);
 			char* time = ctime(&sysTime);
 			cout << "\nData Time: " << time;
@@ -248,31 +247,31 @@ void menu()
 				}
 			} while (userInput != "y" && userInput != "n");
 			{}
-			
+
 			if (YN == true)
 			{
-					cout << "Please enter username for save file (NO SPACES): ";
-					cin >> playerName;
-					userData.open(playerName, ios::app);
-					
-					time_t sysTime = time(0);
-					char* time = ctime(&sysTime);
-					userData
-						<< "\nData Time: " << time
-						<< "Player Name: " << playerName << endl
-						<< "Available Credit: " << balance << endl
-						<< "Games Played: " << correctGuesses + missedGuesses << endl
-						<< "Correct Guesses: " << correctGuesses << endl
-						<< "Missed Guesses: " << missedGuesses << endl
-						<< "Money you won: $" << correctGuesses * 20 << endl
-						<< "Money you lost: $" << missedGuesses * 5 << endl;
-					
-					cout << "Data saved in file: " << playerName << endl;
-					userData.close();
+				cout << "Please enter username for save file (NO SPACES): ";
+				cin >> playerName;
+				userData.open(playerName, ios::app);
+
+				time_t sysTime = time(0);
+				char* time = ctime(&sysTime);
+				userData
+					<< "\nData Time: " << time
+					<< "Player Name: " << playerName << endl
+					<< "Available Credit: " << balance << endl
+					<< "Games Played: " << correctGuesses + missedGuesses << endl
+					<< "Correct Guesses: " << correctGuesses << endl
+					<< "Missed Guesses: " << missedGuesses << endl
+					<< "Money you won: $" << correctGuesses * 20 << endl
+					<< "Money you lost: $" << missedGuesses * 5 << endl;
+
+				cout << "Data saved in file: " << playerName << endl;
+				userData.close();
 
 			}
-			
-			
+
+
 		}
 		break;
 		case '6': cout << "Thank you for using The Winners software. Good bye!\n";
