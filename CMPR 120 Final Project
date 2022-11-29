@@ -338,3 +338,5 @@ void menu()
 	{}
 
 }
+
+//stream in userData using userData >> playerName >> balance 
