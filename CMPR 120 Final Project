@@ -4,17 +4,17 @@
 #include<string>
 #include<ctime>
 #include<fstream>
+#include<cstdlib>
+//I WANT TO USE DATA AS LOADED DATA TO CONTINUE STATS
 using namespace std;
 
 const double MAX_ALLOWED = 20;
-const int MAX_RAND = 1, MIN_RAND = 10;
 
 void menu();
 
 int main()
 {
 	
-
 	menu();
 
 	system("pause");
@@ -23,20 +23,61 @@ int main()
 
 void menu()
 {
-	double balance = 0;
+	double balance = 0, totalBalance = 0;
 	double amount = 0;
 	int correctGuesses = 0;
 	int missedGuesses = 0;
 
 	string playerName, inputYN, userInput;
 
-	bool quit = false, YN = false, validInput = false;
+	bool quit = false, YN = false, validInput = false, fileOpen = false;
 
 	char choice;
 
-	ofstream userData;
+	fstream userData;
 
 	cout << setprecision(2) << fixed << showpoint;
+
+	
+		do
+		{
+			cout << "Do you wish to load previosuly saved data? (Y/N): ";
+			cin >> userInput;
+
+			//Convert to lower
+			for (unsigned i = 0; i < userInput.length(); i++) userInput[i] = tolower(userInput[i]);
+			{
+				if (userInput == "y") YN = true;
+				if (userInput == "n") YN = false;
+			}
+		} while (userInput != "y" && userInput != "n");
+		{}
+
+
+
+
+		if (YN == true)
+		{
+			cout << "\nEnter a previously saved file name: ";
+			cin >> playerName;
+			ifstream userData;
+			userData.open(playerName);
+			while (getline(userData, playerName))
+			{
+				cout << playerName;
+				cout << endl;
+			}
+			if (userData.is_open())
+			{
+				fileOpen = true;
+			}
+			if (fileOpen == false)
+			{
+				cout << "File not found.\n";
+			}
+		}
+	
+
 	cout << "\n***The Winners ***\n" << endl;
 	cout << "***MAIN MENU***\n" << endl;
 
@@ -58,7 +99,7 @@ void menu()
 		{
 			cout << "Your available balance is: $ " << balance << "\n\n";
 		}
-			break;
+		break;
 
 
 		case '2': cout << "You entered 2: Add credits to my account\n";
@@ -90,16 +131,11 @@ void menu()
 				balance += amount;
 			}
 		}
-			break;
+		break;
 
 		case '3': cout << "You entered 3: Play The Guessing Game\n";
 		{
 			bool numberCheck1to10 = false;
-			bool YN = false;
-
-
-
-
 
 			do
 			{
@@ -107,12 +143,9 @@ void menu()
 				cin >> userInput;
 
 				//Convert to lower
-				for (int i = 0; i < userInput.length(); i++) userInput[i] = tolower(userInput[i]);
+				for (unsigned i = 0; i < userInput.length(); i++) userInput[i] = tolower(userInput[i]);
 				{
-					//if (userInput == "Yes") userInput == "y";
-					//if (userInput == "No") userInput == "n";
-					//if (userInput == "yes") userInput == "y";
-					//if (userInput == "no") userInput == "n";
+
 					if (userInput == "y") YN = true;
 					if (userInput == "n") YN = false;
 				}
@@ -127,17 +160,16 @@ void menu()
 				if (balance >= 5)
 				{
 					balance -= 5;
-					cout << "\nYou lost $5.\n";
+					cout << "\nYou payed $5.\n";
 
 					int randomNum, userGuess;
-					unsigned seed = time(0);
-					srand(seed);
+					srand((unsigned) time(NULL));
 
 					do
 					{
 						randomNum = rand() % 10 + 1;
-						cout << randomNum;
-						cout << "\nGuess a number between 1 and 10. ";
+						//cout << randomNum << endl;
+						cout << "\nGuess a number between 1 and 10: ";
 						cin >> userGuess;
 
 						if (!cin.fail())
@@ -163,13 +195,13 @@ void menu()
 
 					if (userGuess == randomNum)
 					{
-						cout << "\nYou are correct! You win $20 dollars!\n";
-						balance += 20;
+						cout << "\nYou are correct! You win $50 dollars!\n";
+						balance += 50;
 						correctGuesses++;
 					}
 					else
 					{
-						cout << "\nYou are incorrect :(\n";
+						cout << "\nYou are incorrect. You lose :( \n";
 						missedGuesses++;
 					}
 				}
@@ -182,31 +214,127 @@ void menu()
 
 
 		}
-			break;
+		break;
 		case '4': cout << "You entered 4: Display My Statistics\n";
 		{
+			//ifstream userData;
 
+
+			/*do
+			{
+				cout << "\nDo you wish to view your stats? (Y/N): ";
+				cin >> userInput;
+
+				//Convert to lower
+				for (unsigned i = 0; i < userInput.length(); i++) userInput[i] = tolower(userInput[i]);
+				{
+
+					if (userInput == "y") YN = true;
+					if (userInput == "n") YN = false;
+				}
+			} while (userInput != "y" && userInput != "n");
+			{}
+
+			if (YN == true)
+			{
+				//cout << "Enter a previously saved file name: ";
+				//cin >> playerName;
+				//userData.open(playerName);
+
+			}*/
+			ifstream userData;
+			userData.open(playerName);
+			if (userData.is_open())
+			{
+				while (getline(userData, playerName))
+				{
+					cout << playerName;
+					cout << endl;
+				}
+
+			}
+			else
+			{
+				cout << "File not loaded.\n";
+			}
+
+
+
+
+
+
+			/*time_t sysTime = time(0);
+			char* time = ctime(&sysTime);
+			cout << "\nData Time: " << time;
+			cout << "Player Name: " << playerName << endl;
+			cout << "Available Credit: " << balance << endl;
+			cout << "Games Played: " << correctGuesses + missedGuesses << endl;
+			cout << "Correct Guesses: " << correctGuesses << endl;
+			cout << "Missed Guesses: " << missedGuesses << endl;
+			cout << "Money you won: $" << correctGuesses * 20 << endl;
+			cout << "Money you lost: $" << missedGuesses * 5 << endl;*/
 		}
-			break;
+		break;
 		case '5':cout << "You entered 5: Save My Statistics\n";
 		{
+			//ofstream userData/*(playerData)*/;
+			cout << "\n****Saving a pre - existing file while not having it initially loaded will overwrite file.****\n";
+			
+			do
+			{
+				cout << "Do you wish to save your stats? (Y/N): ";
+				cin >> userInput;
+
+				//Convert to lower
+				for (unsigned i = 0; i < userInput.length(); i++) userInput[i] = tolower(userInput[i]);
+				{
+
+					if (userInput == "y") YN = true;
+					if (userInput == "n") YN = false;
+				}
+			} while (userInput != "y" && userInput != "n");
+			{}
+
+			if (YN == true)
+			{
+				ofstream userData;
+				cout << "Please enter username for save file (NO SPACES): ";
+				cin >> playerName;
+				userData.open(playerName);
+
+				time_t sysTime = time(0);
+				char* time = ctime(&sysTime);
+				userData << "\nData Time: " << time;
+				userData << "Player Name: " << playerName << endl;
+				userData << "Available Credit: " << balance << endl;
+				userData << "Games Played: " << correctGuesses + missedGuesses << endl;
+				userData << "Correct Guesses: " << correctGuesses << endl;
+				userData << "Missed Guesses: " << missedGuesses << endl;
+				userData << "Money you won: $" << correctGuesses * 50 << endl;
+				userData << "Money you lost: $" << missedGuesses * 5 << endl;
+
+				cout << "Data saved in file: " << playerName << endl;
+				cout << "\nLoad your data on next game startup using your username!\n";
+
+			}
+
 
 		}
-			break;
+		break;
 		case '6': cout << "Thank you for using The Winners software. Good bye!\n";
 		{
+			userData.close();
 			quit = true;
 		}
-			break;
+		break;
 
 		default: cout << "You did not enter 1,2,3,4,5, or 6\n\n";
 		}
 
 
-		
-		
-	}
-	while (!quit);
+
+
+	} while (!quit);
 	{}
-	
+
 }
