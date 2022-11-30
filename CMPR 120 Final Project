@@ -1,11 +1,9 @@
 #include <iostream>
 #include<iomanip>
-#include<cmath>
 #include<string>
 #include<ctime>
 #include<fstream>
-#include<cstdlib>
-//I WANT TO USE DATA AS LOADED DATA TO CONTINUE STATS
+
 using namespace std;
 
 const double MAX_ALLOWED = 20;
@@ -14,7 +12,7 @@ void menu();
 
 int main()
 {
-	
+
 	menu();
 
 	system("pause");
@@ -23,66 +21,26 @@ int main()
 
 void menu()
 {
-	double balance = 0, totalBalance = 0;
+	double balance = 0;
 	double amount = 0;
 	int correctGuesses = 0;
 	int missedGuesses = 0;
 
 	string playerName, inputYN, userInput;
 
-	bool quit = false, YN = false, validInput = false, fileOpen = false;
+	bool quit = false, YN = false, validInput = false;
 
 	char choice;
 
-	fstream userData;
-
 	cout << setprecision(2) << fixed << showpoint;
-
+	cout << "Please enter username (NO SPACES): ";
+	cin >> playerName;
 	
-		do
-		{
-			cout << "Do you wish to load previosuly saved data? (Y/N): ";
-			cin >> userInput;
-
-			//Convert to lower
-			for (unsigned i = 0; i < userInput.length(); i++) userInput[i] = tolower(userInput[i]);
-			{
-				if (userInput == "y") YN = true;
-				if (userInput == "n") YN = false;
-			}
-		} while (userInput != "y" && userInput != "n");
-		{}
-
-
-
-
-		if (YN == true)
-		{
-			cout << "\nEnter a previously saved file name: ";
-			cin >> playerName;
-			ifstream userData;
-			userData.open(playerName);
-			while (getline(userData, playerName))
-			{
-				cout << playerName;
-				cout << endl;
-			}
-			if (userData.is_open())
-			{
-				fileOpen = true;
-			}
-			if (fileOpen == false)
-			{
-				cout << "File not found.\n";
-			}
-		}
-	
-
-	cout << "\n***The Winners ***\n" << endl;
-	cout << "***MAIN MENU***\n" << endl;
-
 	do
 	{
+		cout << "\n***The Winners ***\n" << endl;
+		cout << "***MAIN MENU***\n" << endl;
+		
 		cout << "\nPlease select one of the following:\n" << endl;
 		cout << "\t1: Display my available credit" << endl;
 		cout << "\t2: Add credits to my account" << endl;
@@ -163,13 +121,13 @@ void menu()
 					cout << "\nYou payed $5.\n";
 
 					int randomNum, userGuess;
-					srand((unsigned) time(NULL));
+					srand((unsigned)(time(NULL)));
 
 					do
 					{
 						randomNum = rand() % 10 + 1;
 						//cout << randomNum << endl;
-						cout << "\nGuess a number between 1 and 10: ";
+						cout << "\nGuess a number between 1 and 10. ";
 						cin >> userGuess;
 
 						if (!cin.fail())
@@ -217,10 +175,10 @@ void menu()
 		break;
 		case '4': cout << "You entered 4: Display My Statistics\n";
 		{
-			//ifstream userData;
+			ifstream userData;
 
 
-			/*do
+			do
 			{
 				cout << "\nDo you wish to view your stats? (Y/N): ";
 				cin >> userInput;
@@ -235,35 +193,33 @@ void menu()
 			} while (userInput != "y" && userInput != "n");
 			{}
 
-			if (YN == true)
+			/*if (YN == true)
 			{
-				//cout << "Enter a previously saved file name: ";
-				//cin >> playerName;
-				//userData.open(playerName);
+				cout << "Enter a previously saved file name: ";
+				cin >> playerName;
+				userData.open(playerName);
 
-			}*/
-			ifstream userData;
-			userData.open(playerName);
+			}
 			if (userData.is_open())
 			{
 				while (getline(userData, playerName))
 				{
-					cout << playerName;
-					cout << endl;
+					cout << playerName << endl;
 				}
 
+				userData.close();
 			}
 			else
 			{
-				cout << "File not loaded.\n";
-			}
+				cout << "File not found.\n";
+			}*/
 
 
 
 
 
-
-			/*time_t sysTime = time(0);
+			cout << "\nCurrent Session Stats\n";
+			time_t sysTime = time(0);
 			char* time = ctime(&sysTime);
 			cout << "\nData Time: " << time;
 			cout << "Player Name: " << playerName << endl;
@@ -272,14 +228,12 @@ void menu()
 			cout << "Correct Guesses: " << correctGuesses << endl;
 			cout << "Missed Guesses: " << missedGuesses << endl;
 			cout << "Money you won: $" << correctGuesses * 20 << endl;
-			cout << "Money you lost: $" << missedGuesses * 5 << endl;*/
+			cout << "Money you lost: $" << missedGuesses * 5 << endl;
 		}
 		break;
 		case '5':cout << "You entered 5: Save My Statistics\n";
 		{
-			//ofstream userData/*(playerData)*/;
-			cout << "\n****Saving a pre - existing file while not having it initially loaded will overwrite file.****\n";
-			
+			ofstream userData(playerName);
 			do
 			{
 				cout << "Do you wish to save your stats? (Y/N): ";
@@ -297,24 +251,24 @@ void menu()
 
 			if (YN == true)
 			{
-				ofstream userData;
 				cout << "Please enter username for save file (NO SPACES): ";
 				cin >> playerName;
-				userData.open(playerName);
+				userData.open(playerName, ios::app);
 
 				time_t sysTime = time(0);
 				char* time = ctime(&sysTime);
-				userData << "\nData Time: " << time;
-				userData << "Player Name: " << playerName << endl;
-				userData << "Available Credit: " << balance << endl;
-				userData << "Games Played: " << correctGuesses + missedGuesses << endl;
-				userData << "Correct Guesses: " << correctGuesses << endl;
-				userData << "Missed Guesses: " << missedGuesses << endl;
-				userData << "Money you won: $" << correctGuesses * 50 << endl;
-				userData << "Money you lost: $" << missedGuesses * 5 << endl;
+				userData
+					<< "\nData Time: " << time
+					<< "Player Name: " << playerName << endl
+					<< "Available Credit: " << balance << endl
+					<< "Games Played: " << correctGuesses + missedGuesses << endl
+					<< "Correct Guesses: " << correctGuesses << endl
+					<< "Missed Guesses: " << missedGuesses << endl
+					<< "Money you won: $" << correctGuesses * 50 << endl
+					<< "Money you lost: $" << missedGuesses * 5 << endl;
 
 				cout << "Data saved in file: " << playerName << endl;
-				cout << "\nLoad your data on next game startup using your username!\n";
+				userData.close();
 
 			}
 
@@ -323,7 +277,6 @@ void menu()
 		break;
 		case '6': cout << "Thank you for using The Winners software. Good bye!\n";
 		{
-			userData.close();
 			quit = true;
 		}
 		break;
@@ -339,4 +292,6 @@ void menu()
 
 }
 
-//stream in userData using userData >> playerName >> balance 
+/*solution properties, configuration
+properties, C/C++, preprocessor, preprocessor definitions, edit,
+paste _CRT_SECURE_NO_WARNINGS which enabled the use of ctime*/
