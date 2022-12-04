@@ -1,24 +1,38 @@
-#include <iostream>
+/*
+ THE WINNERS
+ CMPR 120 - FALL 2022
+ DEC 03, 2022
+ FINAL PROJECT
+ COLLABORATIONS: RICARDO PENA, ALFREDO FRIAS, AMNA LAKHANI, KYLE GAMMO
+*/
+
+
+#include<iostream>
 #include<iomanip>
 #include<string>
 #include<ctime>
 #include<fstream>
+#include<climits>
 
 using namespace std;
 
+/*LIMIT FOR INPUT OF FUNDS*/
 const double MAX_ALLOWED = 20;
 
+/*GAME FUNCTION HEADER*/
 void menu();
 
 int main()
 {
 
+	/*GAME FUNCTION*/
 	menu();
 
 	system("pause");
 	return 0;
 }
 
+/*GAME FUNCTION DEFINITION*/
 void menu()
 {
 	double balance = 0;
@@ -26,21 +40,31 @@ void menu()
 	int correctGuesses = 0;
 	int missedGuesses = 0;
 
+	/*inputYN and userInput for YES/NO INPUT VALIDATION*/
 	string playerName, inputYN, userInput;
 
-	bool quit = false, YN = false, validInput = false;
+	/*CASES FOR INPUT VALIDATION AND PROGRAM EXIT*/
+	bool quit = false, YN = false;
 
+	/*MENU SELECTION CHARS*/
 	char choice;
+
+	/*OPEN AND WRITE FILES*/
+	fstream userData;
 
 	cout << setprecision(2) << fixed << showpoint;
 	cout << "Please enter username (NO SPACES): ";
 	cin >> playerName;
-	
+	/*ABOVE SETS PLAYER NAME BEFORE MENU APPEARS*/
+
+	/*DO-WHILE LOOP FOR MENU ALLOWS USER TO SELECT AN OPTION AND BE AUTOMATICALLY 
+	REDIRECTED TO THE MENU UNLESS THE USER PRESSES 6 WHICH EXECUTES THE WHILE*/
 	do
 	{
+		/*MENU OUTPUT*/
 		cout << "\n***The Winners ***\n" << endl;
 		cout << "***MAIN MENU***\n" << endl;
-		
+
 		cout << "\nPlease select one of the following:\n" << endl;
 		cout << "\t1: Display my available credit" << endl;
 		cout << "\t2: Add credits to my account" << endl;
@@ -50,11 +74,13 @@ void menu()
 		cout << "\t6: To exit" << endl;
 		cin >> choice;
 		cout << endl;
+		/*MENU SWITCH*/
 		switch (choice)
 		{
 
 		case '1': cout << "You entered 1: Display my available credit\n";
 		{
+			/*BALANCE OUTPUT*/
 			cout << "Your available balance is: $ " << balance << "\n\n";
 		}
 		break;
@@ -62,8 +88,11 @@ void menu()
 
 		case '2': cout << "You entered 2: Add credits to my account\n";
 		{
+			/*CASE 2*/
+			bool validInput = false;
 			do
 			{
+				
 				cout << "Input amount of credits up to $20: ";
 				cin >> amount;
 
@@ -72,10 +101,12 @@ void menu()
 					if (amount >= 0 && amount <= 20)
 					{
 						validInput = true;
+						balance += amount;
 					}
 					else
 					{
 						cout << "Value must be 0 or less than or equal to 20.\n";
+						
 					}
 				}
 				else
@@ -85,14 +116,13 @@ void menu()
 					cin.ignore(INT_MAX, '\n');
 				}
 			} while (!validInput);
-			{
-				balance += amount;
-			}
+			{}
 		}
 		break;
 
 		case '3': cout << "You entered 3: Play The Guessing Game\n";
 		{
+			/*CASE 3*/
 			bool numberCheck1to10 = false;
 
 			do
@@ -118,7 +148,7 @@ void menu()
 				if (balance >= 5)
 				{
 					balance -= 5;
-					cout << "\nYou payed $5.\n";
+					cout << "\nYou paid $5.\n";
 
 					int randomNum, userGuess;
 					srand((unsigned)(time(NULL)));
@@ -175,49 +205,7 @@ void menu()
 		break;
 		case '4': cout << "You entered 4: Display My Statistics\n";
 		{
-			ifstream userData;
-
-
-			do
-			{
-				cout << "\nDo you wish to view your stats? (Y/N): ";
-				cin >> userInput;
-
-				//Convert to lower
-				for (unsigned i = 0; i < userInput.length(); i++) userInput[i] = tolower(userInput[i]);
-				{
-
-					if (userInput == "y") YN = true;
-					if (userInput == "n") YN = false;
-				}
-			} while (userInput != "y" && userInput != "n");
-			{}
-
-			/*if (YN == true)
-			{
-				cout << "Enter a previously saved file name: ";
-				cin >> playerName;
-				userData.open(playerName);
-
-			}
-			if (userData.is_open())
-			{
-				while (getline(userData, playerName))
-				{
-					cout << playerName << endl;
-				}
-
-				userData.close();
-			}
-			else
-			{
-				cout << "File not found.\n";
-			}*/
-
-
-
-
-
+			/*CASE 4*/
 			cout << "\nCurrent Session Stats\n";
 			time_t sysTime = time(0);
 			char* time = ctime(&sysTime);
@@ -227,19 +215,15 @@ void menu()
 			cout << "Games Played: " << correctGuesses + missedGuesses << endl;
 			cout << "Correct Guesses: " << correctGuesses << endl;
 			cout << "Missed Guesses: " << missedGuesses << endl;
-			cout << "Money you won: $" << correctGuesses * 20 << endl;
+			cout << "Money you won: $" << correctGuesses * 50 << endl;
 			cout << "Money you lost: $" << missedGuesses * 5 << endl;
-		}
-		break;
-		case '5':cout << "You entered 5: Save My Statistics\n";
-		{
-			ofstream userData(playerName);
+
 			do
 			{
-				cout << "Do you wish to save your stats? (Y/N): ";
+				cout << "\nDo you wish to view your saved stats? (Y/N): ";
 				cin >> userInput;
 
-				//Convert to lower
+				//Convert to lower, can also convert strings to all lower case
 				for (unsigned i = 0; i < userInput.length(); i++) userInput[i] = tolower(userInput[i]);
 				{
 
@@ -251,23 +235,63 @@ void menu()
 
 			if (YN == true)
 			{
+				cout << "Enter a previously saved file name: ";
+				cin >> playerName;
+				userData.open(playerName);
+
+			}
+			if (userData.is_open())
+			{
+				cout << "\nSaved Stats\n";
+				while (getline(userData, playerName))
+				{
+					cout << playerName << endl;
+				}
+
+				userData.close();
+			}
+			
+
+		}
+		break;
+		case '5':cout << "You entered 5: Save My Statistics\n";
+		{
+			/*CASE 5*/
+			do
+			{
+				cout << "Do you wish to save your stats? (Y/N): ";
+				cin >> userInput;
+
+				//Convert to lower case letters, can also convert strings to all lower case
+				for (unsigned i = 0; i < userInput.length(); i++) userInput[i] = tolower(userInput[i]);
+				{
+
+					if (userInput == "y") YN = true;
+					if (userInput == "n") YN = false;
+				}
+			} while (userInput != "y" && userInput != "n");
+			{}
+
+			if (YN == true)
+			{
+				
 				cout << "Please enter username for save file (NO SPACES): ";
 				cin >> playerName;
 				userData.open(playerName, ios::app);
 
 				time_t sysTime = time(0);
 				char* time = ctime(&sysTime);
-				userData
-					<< "\nData Time: " << time
-					<< "Player Name: " << playerName << endl
-					<< "Available Credit: " << balance << endl
-					<< "Games Played: " << correctGuesses + missedGuesses << endl
-					<< "Correct Guesses: " << correctGuesses << endl
-					<< "Missed Guesses: " << missedGuesses << endl
-					<< "Money you won: $" << correctGuesses * 50 << endl
-					<< "Money you lost: $" << missedGuesses * 5 << endl;
+					
+				userData << "\nData Time: " << time;
+				userData << "Player Name: " << playerName << endl;
+				userData << "Available Credit: " << balance << endl;
+				userData << "Games Played: " << correctGuesses + missedGuesses << endl;
+				userData << "Correct Guesses: " << correctGuesses << endl;
+				userData << "Missed Guesses: " << missedGuesses << endl;
+				userData << "Money you won: $" << correctGuesses * 50 << endl;
+				userData << "Money you lost: $" << missedGuesses * 5 << endl;
 
-				cout << "Data saved in file: " << playerName << endl;
+				cout << "\nData saved in file: " << playerName << endl;
 				userData.close();
 
 			}
@@ -277,6 +301,7 @@ void menu()
 		break;
 		case '6': cout << "Thank you for using The Winners software. Good bye!\n";
 		{
+			/*CASE 6*/
 			quit = true;
 		}
 		break;
@@ -292,6 +317,7 @@ void menu()
 
 }
 
+//FOR --CTIME--
 /*solution properties, configuration
 properties, C/C++, preprocessor, preprocessor definitions, edit,
 paste _CRT_SECURE_NO_WARNINGS which enabled the use of ctime*/
