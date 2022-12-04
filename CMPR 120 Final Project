@@ -127,11 +127,9 @@ void menu()
 
 			do
 			{
-				cout << "This game costs $5 dollars to play. Do you wish to proceed? (Y/N): ";
+				cout << "This game costs $5 dollars to play. Do you wish to proceed? (lowercase) (y/n): ";
 				cin >> userInput;
 
-				//Convert to lower, can also convert strings to all lower case
-				for (unsigned i = 0; i < userInput.length(); i++) userInput[i] = tolower(userInput[i]);
 				{
 					/*YES/NO Input and input validation*/
 					if (userInput == "y") YN = true;
@@ -175,6 +173,10 @@ void menu()
 						}
 						else
 						{
+							/*IF the user inputs a string or a non integer which doesnt
+							satisfy the above requirements, the error flag will be cleared
+							and the program will skip the integer max up until the newline
+							which is decalred by the user as he presses enter after input*/
 							cout << "Value must be a number.\n";
 							cin.clear();
 							cin.ignore(INT_MAX, '\n');
@@ -223,11 +225,9 @@ void menu()
 
 			do
 			{
-				cout << "\nDo you wish to view your saved stats? (Y/N): ";
+				cout << "\nDo you wish to view your saved stats? (lowercase) (y/n): ";
 				cin >> userInput;
 
-				//Convert to lower, can also convert strings to all lower case
-				for (unsigned i = 0; i < userInput.length(); i++) userInput[i] = tolower(userInput[i]);
 				{
 
 					if (userInput == "y") YN = true;
@@ -262,11 +262,9 @@ void menu()
 			/*CASE 5*/
 			do
 			{
-				cout << "Do you wish to save your stats? (Y/N): ";
+				cout << "Do you wish to save your stats? (lowercase) (y/n): ";
 				cin >> userInput;
 
-				//Convert to lower case letters, can also convert strings to all lower case
-				for (unsigned i = 0; i < userInput.length(); i++) userInput[i] = tolower(userInput[i]);
 				{
 					
 					if (userInput == "y") YN = true;
