@@ -81,7 +81,7 @@ void menu()
 		case '1': cout << "You entered 1: Display my available credit\n";
 		{
 			/*BALANCE OUTPUT*/
-			cout << "Your available balance is: $ " << balance << "\n\n";
+			cout << "Your available balance is: $" << balance << "\n\n";
 		}
 		break;
 
@@ -95,7 +95,7 @@ void menu()
 				
 				cout << "Input amount of credits up to $20: ";
 				cin >> amount;
-
+				/*INPUT VALIDATION if input doesnt fail, check the following parameters*/
 				if (!cin.fail())
 				{
 					if (amount >= 0 && amount <= 20)
@@ -130,10 +130,10 @@ void menu()
 				cout << "This game costs $5 dollars to play. Do you wish to proceed? (Y/N): ";
 				cin >> userInput;
 
-				//Convert to lower
+				//Convert to lower, can also convert strings to all lower case
 				for (unsigned i = 0; i < userInput.length(); i++) userInput[i] = tolower(userInput[i]);
 				{
-
+					/*YES/NO Input and input validation*/
 					if (userInput == "y") YN = true;
 					if (userInput == "n") YN = false;
 				}
@@ -142,24 +142,26 @@ void menu()
 
 
 
-
+			/*IF USER ENTERED Y, YN IS NOW TRUE*/
 			if (YN == true)
 			{
 				if (balance >= 5)
 				{
 					balance -= 5;
 					cout << "\nYou paid $5.\n";
-
+					/*RANDOM NUMBER GENERATOR INITIATION*/
 					int randomNum, userGuess;
 					srand((unsigned)(time(NULL)));
 
 					do
 					{
+						/*RNG SELECTION*/
 						randomNum = rand() % 10 + 1;
 						//cout << randomNum << endl;
 						cout << "\nGuess a number between 1 and 10. ";
 						cin >> userGuess;
 
+						/*INPUT VALIDATION*/
 						if (!cin.fail())
 						{
 							if (userGuess >= 1 && userGuess <= 10)
@@ -180,7 +182,7 @@ void menu()
 					} while (!numberCheck1to10);
 					{}
 
-
+					/*USER SELECTS VALID INTEGER, THEN THIS EXECUTES*/
 					if (userGuess == randomNum)
 					{
 						cout << "\nYou are correct! You win $50 dollars!\n";
@@ -206,12 +208,13 @@ void menu()
 		case '4': cout << "You entered 4: Display My Statistics\n";
 		{
 			/*CASE 4*/
+			/*CURRENT SESSION STATS*/
 			cout << "\nCurrent Session Stats\n";
 			time_t sysTime = time(0);
 			char* time = ctime(&sysTime);
 			cout << "\nData Time: " << time;
 			cout << "Player Name: " << playerName << endl;
-			cout << "Available Credit: " << balance << endl;
+			cout << "Available Credit: $" << balance << endl;
 			cout << "Games Played: " << correctGuesses + missedGuesses << endl;
 			cout << "Correct Guesses: " << correctGuesses << endl;
 			cout << "Missed Guesses: " << missedGuesses << endl;
@@ -232,7 +235,7 @@ void menu()
 				}
 			} while (userInput != "y" && userInput != "n");
 			{}
-
+			/*DATA READING*/
 			if (YN == true)
 			{
 				cout << "Enter a previously saved file name: ";
@@ -265,7 +268,7 @@ void menu()
 				//Convert to lower case letters, can also convert strings to all lower case
 				for (unsigned i = 0; i < userInput.length(); i++) userInput[i] = tolower(userInput[i]);
 				{
-
+					
 					if (userInput == "y") YN = true;
 					if (userInput == "n") YN = false;
 				}
@@ -274,7 +277,7 @@ void menu()
 
 			if (YN == true)
 			{
-				
+				/*DATA SAVING*/
 				cout << "Please enter username for save file (NO SPACES): ";
 				cin >> playerName;
 				userData.open(playerName, ios::app);
@@ -284,7 +287,7 @@ void menu()
 					
 				userData << "\nData Time: " << time;
 				userData << "Player Name: " << playerName << endl;
-				userData << "Available Credit: " << balance << endl;
+				userData << "Available Credit: $" << balance << endl;
 				userData << "Games Played: " << correctGuesses + missedGuesses << endl;
 				userData << "Correct Guesses: " << correctGuesses << endl;
 				userData << "Missed Guesses: " << missedGuesses << endl;
